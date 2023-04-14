@@ -40,20 +40,12 @@
        :content (md/md-to-html-string (str/join "\n" (rest lines)))})))
 
 
-(->> blog-dir
-    (get-md-files))
-
-
-(->> blog-dir
-     (get-md-files)
-     (map process-blog-post)
-     (sort-by :date #(compare %2 %1)))
 
 (defn run [posts-dir]
   (->> posts-dir
        (get-md-files)
        (map process-blog-post)
-       (sort-by :date (fn [a b] (print (str a " " b))(compare b a)))
+       (sort-by :date #(compare %2 %1))
        (map :content)
        (str/join "<hr />")))
 
