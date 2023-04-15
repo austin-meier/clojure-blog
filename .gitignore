@@ -14,5 +14,5 @@ pom.xml.asc
 .cpcache/
 /resources/output/*
 *.DS_Store
-.clj-kondo/
-.lsp/
+/.clj-kondo/
+/.lsp/
