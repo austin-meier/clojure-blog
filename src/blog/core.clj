@@ -4,16 +4,21 @@
             [clojure.string :as str]
             [clojure.instant :as inst]))
 
-;; Set the directory for the blog post markdown files
-(def blog-dir "./blog/")
+;; Let's set the directory for the blog post markdown files
+(def posts-dir "./resources/posts/")
+
+;; Let's set the directory for the output of the build website
+(def output-dir "./resources/output/")
+
+(def static-resources-dir "./resources/static/")
 
 ;; Let's define the HTML that goes above the blog posts html
 (def html-header
-  (slurp (str blog-dir "static/header.html")))
+  (slurp (str static-resources-dir "header.html")))
 
 ;; Let's define the HTML that goes below the blog posts html
 (def html-footer
-  (slurp (str blog-dir "static/footer.html")))
+  (slurp (str static-resources-dir "footer.html")))
 
 ; Let's attempt to load the directory for the posts directory
 #_(map #(.toString %) (.list (io/file posts-dir)))
@@ -23,23 +28,17 @@
   [dir]
   (->> (io/file dir)
        (file-seq)
-       (map #(.toString %))
-       (filter #(str/ends-with? % ".md"))))
-
-
-;;(map slurp (get-md-files posts-dir))
+       (filter #(str/ends-with? (.getName %) ".md"))))
 
 (defn process-blog-post
   "Read the blog post markdown file and return a map where
   the first line of the file is the :date keyword and the rest
   of the file is the :content keyword"
   [file]
-  (with-open [rdr (io/reader file)]
-    (let [lines (vec (line-seq rdr))]
-      {:date (inst/read-instant-date (first lines))
-       :content (md/md-to-html-string (str/join "\n" (rest lines)))})))
+    {:date (inst/read-instant-date (first (str/split (.getName file) #"#")))
+     :content (md/md-to-html-string (slurp file))})
 
-
+(map process-blog-post(get-md-files posts-dir))
 
 (defn run [posts-dir]
   (->> posts-dir

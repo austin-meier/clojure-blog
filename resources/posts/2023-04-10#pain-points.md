@@ -1,6 +1,5 @@
-2023-04-09
 # Creating this blog
-<p style="color: #676767;">April 9th, 2023</p>
+<p style="color: #676767;">April 10th, 2023</p>
 
 ## The Process
 In an attempt to build something actually useful with Clojure I am created a blog! The Clojure project is static website blog generator that will parse markdown files in a directory and convert them to HTML. 
