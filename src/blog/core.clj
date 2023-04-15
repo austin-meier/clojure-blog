@@ -10,6 +10,7 @@
 ;; Let's set the directory for the output of the build website
 (def output-dir "./resources/output/")
 
+;; Let's set the directory for static resources to be used when building the blog
 (def static-resources-dir "./resources/static/")
 
 ;; Let's define the HTML that goes above the blog posts html
@@ -23,6 +24,7 @@
 ; Let's attempt to load the directory for the posts directory
 #_(map #(.toString %) (.list (io/file posts-dir)))
 
+;; Let's load all the markdown files in the directory passed
 (defn get-md-files
   "Return a sequence of all markdown files in dir"
   [dir]
@@ -40,7 +42,7 @@
 
 (map process-blog-post(get-md-files posts-dir))
 
-(defn run [posts-dir]
+(defn generate-blog-post-html [posts-dir]
   (->> posts-dir
        (get-md-files)
        (map process-blog-post)
@@ -51,12 +53,12 @@
 
 (defn create-blog-html []
   (str html-header
-       (run blog-dir)
+       (generate-blog-post-html posts-dir)
        html-footer))
 
 (defn build-blog
   "Build the static blog website HTML"
   []
-  (spit "./blog/output/blog.html" (create-blog-html)))
+  (spit (str output-dir "blog.html") (create-blog-html)))
 
 (build-blog)
