@@ -1,2 +1,2 @@
 # clojure-blog
-My Clojure static blog generator 
+Generates a blog from Markdown files. Written in Clojure
